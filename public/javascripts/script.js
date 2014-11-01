@@ -45,7 +45,6 @@ Play.prototype = {
   }
 , move: function(item) {
     var _this = this
-    debugger
     this.dude.frame = item.frameNum
     this.sequence.push(item.name)
     this.checkEnd()

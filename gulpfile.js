@@ -11,7 +11,7 @@ gulp.task('build', ['scripts', 'styles'])
 var paths = {
   app: './bin/wwww'
 , scripts: {
-    watch: './assets/javascripts/*'
+    watch: './assets/javascripts/**/*.js'
   , src: './assets/javascripts/script.js'
   , tar: './public/javascripts/'
   }
