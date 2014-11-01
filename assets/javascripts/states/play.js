@@ -4,6 +4,8 @@
   //   , Scoreboard = require('../prefabs/scoreboard')
   //   , Shield = require('../prefabs/shield')
 
+var Player = require('../prefabs/player')
+
 function Play() {}
 Play.prototype = {
   preload: function() {
@@ -13,21 +15,24 @@ Play.prototype = {
   }
 , create: function() {
     this.game.stage.backgroundColor = '#182d3b'
-    this.dude = this.game.add.sprite(300, 200, 'dude')
+    this.player = new Player(this.game, 350, 200)
+    this.enemy = new Player(this.game, 420, 200, 'daveo')
+    this.game.add.existing(this.player)
+    this.game.add.existing(this.enemy)
 
-    var punchButton = this.game.add.button(450, gHeight - 100, 'button', this.move, this)
+    var punchButton = this.game.add.button(400, gHeight - 100, 'button', this.move, this)
     punchButton.name = 'punch'
     punchButton.frameNum = 1
 
-    var kickButton = this.game.add.button(450, gHeight - 200, 'button', this.move, this)
+    var kickButton = this.game.add.button(400, gHeight - 200, 'button', this.move, this)
     kickButton.name = 'kick'
     kickButton.frameNum = 2
 
-    var jumpButton = this.game.add.button(250, gHeight - 100, 'button', this.move, this)
+    var jumpButton = this.game.add.button(200, gHeight - 100, 'button', this.move, this)
     jumpButton.name = 'jump'
     jumpButton.frameNum = 3
 
-    var duckButton = this.game.add.button(250, gHeight - 200, 'button', this.move, this)
+    var duckButton = this.game.add.button(200, gHeight - 200, 'button', this.move, this)
     duckButton.name = 'duck'
     duckButton.frameNum = 4
 
@@ -35,22 +40,17 @@ Play.prototype = {
 , update: function() {
 
   }
+, move: function(item) {
+    this.player.move(item.frameNum, item.name)
+    this.sequence.push(item.name)
+    this.checkEnd()
+  }
 , checkEnd: function() {
     if (this.sequence.length >= 5) {
       console.log('game over, man game over')
       console.log(this.sequence)
       this.sequence = []
     }
-  }
-, move: function(item) {
-    var _this = this
-    this.dude.frame = item.frameNum
-    this.sequence.push(item.name)
-    this.checkEnd()
-    setTimeout(function() {
-      _this.dude.frame = 0
-    }
-    , 200)
   }
 }
 
