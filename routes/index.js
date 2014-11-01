@@ -29,7 +29,7 @@ var passport = require('passport')
 passport.use(new TwitterStrategy({
     consumerKey: process.env['TWITTER_KEY'],
     consumerSecret: process.env['TWITTER_SECRET'],
-    callbackURL: "http://localhost:3000/auth/twitter/callback"
+    callbackURL: process.env['DOMAIN'] + "/auth/twitter/callback"
   },
   function(token, tokenSecret, profile, done) {
     console.log(profile)
