@@ -6,6 +6,7 @@ window.onload = function () {
   var game = new Phaser.Game(gWidth, gHeight, Phaser.AUTO, 'game');
 
   game.state.add('play', require('./states/play'))
+  game.state.add('bash', require('./states/bash'))
 
   game.state.start('play');
 }

@@ -3,6 +3,7 @@ var moveFrames = {
 , 'kick': 2
 , 'jump': 3
 , 'duck': 4
+, 'stunned': 0
 }
 
 var Player = function(game, x, y, enemy) {
@@ -13,12 +14,14 @@ var Player = function(game, x, y, enemy) {
   if (enemy) {
     this.scale.x = -2
     this.scale.y = 2
+    this.visible = false
   } else {
     this.scale.x = 2
     this.scale.y = 2
   }
 
   this.score = 0
+  this.stunned = false
 
 }
 

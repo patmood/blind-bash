@@ -1,12 +1,6 @@
-  // var DEBUG = false
-  //   , Rocket = require('../prefabs/rocket')
-  //   , Asteroid = require('../prefabs/asteroid')
-  //   , Scoreboard = require('../prefabs/scoreboard')
-  //   , Shield = require('../prefabs/shield')
-
 var Player = require('../prefabs/player')
 
-function Play() {}
+function Bash() {}
 Play.prototype = {
   preload: function() {
     this.game.load.spritesheet('dude', 'images/tank_guy.png', 130, 160)
