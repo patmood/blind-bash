@@ -4,7 +4,7 @@ var gulp = require('gulp')
   , nodemon = require('gulp-nodemon')
 
 // Commands
-gulp.task('default', ['build', 'watch', 'serve'])
+gulp.task('default', ['build', 'watch'])
 gulp.task('build', ['scripts', 'styles'])
 
 // Save paths for easy reference
