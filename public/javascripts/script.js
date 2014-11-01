@@ -60,37 +60,43 @@ function Play() {}
 Play.prototype = {
   preload: function() {
     this.game.load.spritesheet('dude', 'images/tank_guy.png', 130, 160)
+    this.game.load.spritesheet('impact', 'images/pow_wham_bam.png', 200, 156)
     this.game.load.image('button', 'images/button_green.png')
     this.sequence = []
   }
 , create: function() {
     this.game.stage.backgroundColor = '#182d3b'
+
+    // Add Players
     this.player = new Player(this.game, 350, 200)
     this.enemy = new Player(this.game, 420, 200, 'daveo')
     this.game.add.existing(this.player)
     this.game.add.existing(this.enemy)
 
-    var punchButton = this.game.add.button(400, gHeight - 100, 'button', this.move, this)
+    this.impact = this.game.add.sprite(270, 20, 'impact')
+    this.impact.visible = false
+
+    // Add impact graphics
+
+    // Add buttons
+    var punchButton = this.game.add.button(400, gHeight - 130, 'button', this.move, this)
     punchButton.moveName = 'punch'
-    // punchButton.frameNum = 1
 
     var kickButton = this.game.add.button(400, gHeight - 200, 'button', this.move, this)
     kickButton.moveName = 'kick'
-    // kickButton.frameNum = 2
 
-    var jumpButton = this.game.add.button(200, gHeight - 100, 'button', this.move, this)
+    var jumpButton = this.game.add.button(200, gHeight - 130, 'button', this.move, this)
     jumpButton.moveName = 'jump'
-    // jumpButton.frameNum = 3
 
     var duckButton = this.game.add.button(200, gHeight - 200, 'button', this.move, this)
     duckButton.moveName = 'duck'
-    // duckButton.frameNum = 4
 
   }
 , update: function() {
 
   }
 , move: function(item) {
+    if (this.sequence >= 6) return;
     this.player.move(item.moveName)
     this.sequence.push(item.moveName)
     this.checkEnd()
@@ -107,20 +113,28 @@ Play.prototype = {
 
     function makeMove(i) {
       _this.game.time.events.add(Phaser.Timer.SECOND * 0.5, function() {
-        if (i < enemySeq.length ) {
-          _this.player.move(playerSeq[i])
-          _this.enemy.move(enemySeq[i])
-          makeMove(i + 1)
-        } else {
-          console.log('DONE')
-        }
-      }, _this)
-
+        if (i >= enemySeq.length ) return;
+        _this.checkDamage(playerSeq[i], enemySeq[i])
+        _this.player.move(playerSeq[i])
+        _this.enemy.move(enemySeq[i])
+        makeMove(i + 1)
+      }, this)
     }
 
     makeMove(0)
 
     this.sequence = []
+  }
+, checkDamage: function(playerMove, enemyMove) {
+    console.log(playerMove, 'vs', enemyMove)
+    if (playerMove == enemyMove) {
+      var _this = this
+      this.impact.frame = this.game.rnd.integerInRange(0, 2)
+      this.impact.visible = true
+      this.game.time.events.add(Phaser.Timer.SECOND * 0.2, function() {
+        _this.impact.visible = false
+      }, this)
+    }
   }
 }
 
