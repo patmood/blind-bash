@@ -61,15 +61,15 @@ module.exports = Player
 var Player = require('../prefabs/player')
 
 function Bash() {}
-Play.prototype = {
-  preload: function() {
-    this.game.load.spritesheet('dude', 'images/tank_guy.png', 130, 160)
-    this.game.load.spritesheet('impact', 'images/pow_wham_bam.png', 200, 156)
-    this.game.load.image('button', 'images/button_green.png')
-    this.sequence = []
+Bash.prototype = {
+  init: function(params) {
+    this.playerSeq = params.playerSeq
+    this.enemySeq = params.enemySeq
+  }
+, preload: function() {
   }
 , create: function() {
-    this.game.stage.backgroundColor = '#182d3b'
+    this.game.stage.backgroundColor = '#F23838'
 
     // Add Players
     this.player = new Player(this.game, 350, 200)
@@ -77,44 +77,24 @@ Play.prototype = {
     this.game.add.existing(this.player)
     this.game.add.existing(this.enemy)
 
+    // Add buttons
+    this.game.add.button(300, gHeight - 130, 'button', function() {
+      this.game.state.start('play', true, false)
+    }, this)
+
+    // Add impact graphics
     this.impact = this.game.add.sprite(270, 20, 'impact')
     this.impact.visible = false
 
-    // Add impact graphics
-
-    // Add buttons
-    var punchButton = this.game.add.button(400, gHeight - 130, 'button', this.move, this)
-    punchButton.moveName = 'punch'
-
-    var kickButton = this.game.add.button(400, gHeight - 200, 'button', this.move, this)
-    kickButton.moveName = 'kick'
-
-    var jumpButton = this.game.add.button(200, gHeight - 130, 'button', this.move, this)
-    jumpButton.moveName = 'jump'
-
-    var duckButton = this.game.add.button(200, gHeight - 200, 'button', this.move, this)
-    duckButton.moveName = 'duck'
+    // Play bash
+    this.playBash(this.playerSeq, this.enemySeq)
 
   }
 , update: function() {
     this.game.debug.text(this.player.score, 300, 100)
     this.game.debug.text(this.enemy.score, 450, 100)
-
-  }
-, move: function(item) {
-    if (this.sequence >= 6) return;
-    this.player.move(item.moveName)
-    this.sequence.push(item.moveName)
-    this.checkEnd()
-  }
-, checkEnd: function() {
-    if (this.sequence.length >= 6) {
-      console.log('game over, man game over')
-      this.playBash(this.sequence)
-    }
   }
 , playBash: function(playerSeq, enemySeq) {
-    var enemySeq = ['punch', 'punch', 'jump', 'duck', 'punch', 'kick']
     var _this = this
     this.enemy.visible = true
 
@@ -133,8 +113,6 @@ Play.prototype = {
     }
 
     makeMove(0)
-
-    this.sequence = []
   }
 , checkDamage: function(playerMove, enemyMove) {
     console.log(playerMove, 'vs', enemyMove)
@@ -177,15 +155,9 @@ Play.prototype = {
   }
 }
 
-module.exports = Play
+module.exports = Bash
 
 },{"../prefabs/player":2}],4:[function(require,module,exports){
-  // var DEBUG = false
-  //   , Rocket = require('../prefabs/rocket')
-  //   , Asteroid = require('../prefabs/asteroid')
-  //   , Scoreboard = require('../prefabs/scoreboard')
-  //   , Shield = require('../prefabs/shield')
-
 var Player = require('../prefabs/player')
 
 function Play() {}
@@ -194,7 +166,8 @@ Play.prototype = {
     this.game.load.spritesheet('dude', 'images/tank_guy.png', 130, 160)
     this.game.load.spritesheet('impact', 'images/pow_wham_bam.png', 200, 156)
     this.game.load.image('button', 'images/button_green.png')
-    this.sequence = []
+    this.playerSeq = []
+    this.enemySeq =['punch', 'punch', 'jump', 'duck', 'punch', 'kick']
   }
 , create: function() {
     this.game.stage.backgroundColor = '#182d3b'
@@ -205,10 +178,10 @@ Play.prototype = {
     this.game.add.existing(this.player)
     this.game.add.existing(this.enemy)
 
+    // Add impact graphics
     this.impact = this.game.add.sprite(270, 20, 'impact')
     this.impact.visible = false
 
-    // Add impact graphics
 
     // Add buttons
     var punchButton = this.game.add.button(400, gHeight - 130, 'button', this.move, this)
@@ -225,83 +198,18 @@ Play.prototype = {
 
   }
 , update: function() {
-    this.game.debug.text(this.player.score, 300, 100)
-    this.game.debug.text(this.enemy.score, 450, 100)
-
   }
 , move: function(item) {
-    if (this.sequence >= 6) return;
+    if (this.playerSeq >= 6) return;
     this.player.move(item.moveName)
-    this.sequence.push(item.moveName)
+    this.playerSeq.push(item.moveName)
     this.checkEnd()
   }
 , checkEnd: function() {
-    if (this.sequence.length >= 6) {
-      console.log('game over, man game over')
-      this.playBash(this.sequence)
+    if (this.playerSeq.length >= 6) {
+      this.game.state.start('bash', true, false, { playerSeq: this.playerSeq
+                                                 , enemySeq: this.enemySeq })
     }
-  }
-, playBash: function(playerSeq, enemySeq) {
-    var enemySeq = ['punch', 'punch', 'jump', 'duck', 'punch', 'kick']
-    var _this = this
-    this.enemy.visible = true
-
-    function makeMove(i) {
-      _this.game.time.events.add(Phaser.Timer.SECOND * 0.5, function() {
-        if (i >= enemySeq.length ) return;
-        if (_this.player.stunned) playerSeq[i] = 'stunned'
-        if (_this.enemy.stunned) enemySeq[i] = 'stunned'
-        _this.player.stunned = false
-        _this.enemy.stunned = false
-        _this.checkDamage(playerSeq[i], enemySeq[i])
-        _this.player.move(playerSeq[i])
-        _this.enemy.move(enemySeq[i])
-        makeMove(i + 1)
-      }, this)
-    }
-
-    makeMove(0)
-
-    this.sequence = []
-  }
-, checkDamage: function(playerMove, enemyMove) {
-    console.log(playerMove, 'vs', enemyMove)
-    var _this = this
-      , impactFlag = false
-
-    if ((playerMove == 'kick' && enemyMove != 'jump') ||
-        (playerMove == 'punch' && enemyMove != 'duck')) {
-      this.player.successMove()
-      impactFlag = true
-    }
-
-    if ((enemyMove == 'kick' && playerMove != 'jump') ||
-        (enemyMove == 'punch' && playerMove != 'duck')) {
-      this.enemy.successMove()
-      impactFlag = true
-    }
-
-    if ((playerMove == 'duck' && enemyMove == 'punch') ||
-        (playerMove == 'jump' && enemyMove == 'kick')) {
-      console.log('enemy stunned!')
-      this.enemy.stunned = true
-    }
-
-    if ((enemyMove == 'duck' && playerMove == 'punch') ||
-        (enemyMove == 'jump' && playerMove == 'kick')) {
-      console.log('you are stunned!')
-      this.player.stunned = true
-    }
-
-    if (impactFlag) this.showImpact()
-  }
-, showImpact: function() {
-    var _this = this
-    this.impact.frame = this.game.rnd.integerInRange(0, 2)
-    this.impact.visible = true
-    this.game.time.events.add(Phaser.Timer.SECOND * 0.2, function() {
-      _this.impact.visible = false
-    }, this)
   }
 }
 

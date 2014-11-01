@@ -1,15 +1,15 @@
 var Player = require('../prefabs/player')
 
 function Bash() {}
-Play.prototype = {
-  preload: function() {
-    this.game.load.spritesheet('dude', 'images/tank_guy.png', 130, 160)
-    this.game.load.spritesheet('impact', 'images/pow_wham_bam.png', 200, 156)
-    this.game.load.image('button', 'images/button_green.png')
-    this.sequence = []
+Bash.prototype = {
+  init: function(params) {
+    this.playerSeq = params.playerSeq
+    this.enemySeq = params.enemySeq
+  }
+, preload: function() {
   }
 , create: function() {
-    this.game.stage.backgroundColor = '#182d3b'
+    this.game.stage.backgroundColor = '#F23838'
 
     // Add Players
     this.player = new Player(this.game, 350, 200)
@@ -17,44 +17,24 @@ Play.prototype = {
     this.game.add.existing(this.player)
     this.game.add.existing(this.enemy)
 
+    // Add buttons
+    this.game.add.button(300, gHeight - 130, 'button', function() {
+      this.game.state.start('play', true, false)
+    }, this)
+
+    // Add impact graphics
     this.impact = this.game.add.sprite(270, 20, 'impact')
     this.impact.visible = false
 
-    // Add impact graphics
-
-    // Add buttons
-    var punchButton = this.game.add.button(400, gHeight - 130, 'button', this.move, this)
-    punchButton.moveName = 'punch'
-
-    var kickButton = this.game.add.button(400, gHeight - 200, 'button', this.move, this)
-    kickButton.moveName = 'kick'
-
-    var jumpButton = this.game.add.button(200, gHeight - 130, 'button', this.move, this)
-    jumpButton.moveName = 'jump'
-
-    var duckButton = this.game.add.button(200, gHeight - 200, 'button', this.move, this)
-    duckButton.moveName = 'duck'
+    // Play bash
+    this.playBash(this.playerSeq, this.enemySeq)
 
   }
 , update: function() {
     this.game.debug.text(this.player.score, 300, 100)
     this.game.debug.text(this.enemy.score, 450, 100)
-
-  }
-, move: function(item) {
-    if (this.sequence >= 6) return;
-    this.player.move(item.moveName)
-    this.sequence.push(item.moveName)
-    this.checkEnd()
-  }
-, checkEnd: function() {
-    if (this.sequence.length >= 6) {
-      console.log('game over, man game over')
-      this.playBash(this.sequence)
-    }
   }
 , playBash: function(playerSeq, enemySeq) {
-    var enemySeq = ['punch', 'punch', 'jump', 'duck', 'punch', 'kick']
     var _this = this
     this.enemy.visible = true
 
@@ -73,8 +53,6 @@ Play.prototype = {
     }
 
     makeMove(0)
-
-    this.sequence = []
   }
 , checkDamage: function(playerMove, enemyMove) {
     console.log(playerMove, 'vs', enemyMove)
@@ -117,4 +95,4 @@ Play.prototype = {
   }
 }
 
-module.exports = Play
+module.exports = Bash
