@@ -36,8 +36,6 @@ Play.prototype = {
     duckButton.moveName = 'duck'
     // duckButton.frameNum = 4
 
-    this.playBash()
-
   }
 , update: function() {
 
@@ -48,20 +46,31 @@ Play.prototype = {
     this.checkEnd()
   }
 , checkEnd: function() {
-    if (this.sequence.length >= 5) {
+    if (this.sequence.length >= 6) {
       console.log('game over, man game over')
-      console.log(this.sequence)
-      this.sequence = []
+      this.playBash(this.sequence)
     }
   }
 , playBash: function(playerSeq, enemySeq) {
-    var playerSeq = ['kick']
-      , enemySeq = ['punch', 'punch', 'jump', 'duck']
-
+    var enemySeq = ['punch', 'punch', 'jump', 'duck', 'punch', 'kick']
     var _this = this
-    enemySeq.forEach(function(moveName) {
-      _this.enemy.move(moveName)
-    })
+
+    function makeMove(i) {
+      _this.game.time.events.add(Phaser.Timer.SECOND * 0.5, function() {
+        if (i < enemySeq.length ) {
+          _this.player.move(playerSeq[i])
+          _this.enemy.move(enemySeq[i])
+          makeMove(i + 1)
+        } else {
+          console.log('DONE')
+        }
+      }, _this)
+
+    }
+
+    makeMove(0)
+
+    this.sequence = []
   }
 }
 
