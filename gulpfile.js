@@ -9,7 +9,7 @@ gulp.task('build', ['scripts', 'styles'])
 
 // Save paths for easy reference
 var paths = {
-  app: './app.js'
+  app: './bin/wwww'
 , scripts: {
     watch: './assets/javascripts/*.js'
   , src: './assets/javascripts/script.js'

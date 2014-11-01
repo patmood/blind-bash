@@ -1,8 +1,15 @@
 var express = require('express');
 var router = express.Router();
 
-var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/test');
+var mongoose = require('mongoose')
+  , uriUtil = require('mongodb-uri')
+  , options = { server: { socketOptions: { keepAlive: 1, connectTimeoutMS: 30000 } },
+                replset: { socketOptions: { keepAlive: 1, connectTimeoutMS : 30000 } } }
+
+var mongodbUri = process.env['MONGOLAB_URI']
+  , mongooseUri = uriUtil.formatMongoose(mongodbUri)
+
+mongoose.connect(mongooseUri, options);
 
 var findOrCreate = require('mongoose-findorcreate')
   , Schema = mongoose.Schema
