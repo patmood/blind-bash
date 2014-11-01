@@ -12,6 +12,13 @@ window.onload = function () {
 }
 
 },{"./states/play":3}],2:[function(require,module,exports){
+var moveFrames = {
+  'punch': 1
+, 'kick': 2
+, 'jump': 3
+, 'duck': 4
+}
+
 var Player = function(game, x, y, enemy) {
   Phaser.Sprite.call(this, game, x, y, 'dude', 0);
 
@@ -30,9 +37,9 @@ var Player = function(game, x, y, enemy) {
 Player.prototype = Object.create(Phaser.Sprite.prototype)
 Player.prototype.constructor = Player
 
-Player.prototype.move = function(frameNum, name) {
+Player.prototype.move = function(moveName) {
   var _this = this
-  this.frame = frameNum
+  this.frame = moveFrames[moveName]
   this.game.time.events.add(Phaser.Timer.SECOND * 0.3, function() {
     this.frame = 0
   }, this)
@@ -64,28 +71,30 @@ Play.prototype = {
     this.game.add.existing(this.enemy)
 
     var punchButton = this.game.add.button(400, gHeight - 100, 'button', this.move, this)
-    punchButton.name = 'punch'
-    punchButton.frameNum = 1
+    punchButton.moveName = 'punch'
+    // punchButton.frameNum = 1
 
     var kickButton = this.game.add.button(400, gHeight - 200, 'button', this.move, this)
-    kickButton.name = 'kick'
-    kickButton.frameNum = 2
+    kickButton.moveName = 'kick'
+    // kickButton.frameNum = 2
 
     var jumpButton = this.game.add.button(200, gHeight - 100, 'button', this.move, this)
-    jumpButton.name = 'jump'
-    jumpButton.frameNum = 3
+    jumpButton.moveName = 'jump'
+    // jumpButton.frameNum = 3
 
     var duckButton = this.game.add.button(200, gHeight - 200, 'button', this.move, this)
-    duckButton.name = 'duck'
-    duckButton.frameNum = 4
+    duckButton.moveName = 'duck'
+    // duckButton.frameNum = 4
+
+    this.playBash()
 
   }
 , update: function() {
 
   }
 , move: function(item) {
-    this.player.move(item.frameNum, item.name)
-    this.sequence.push(item.name)
+    this.player.move(item.moveName)
+    this.sequence.push(item.moveName)
     this.checkEnd()
   }
 , checkEnd: function() {
@@ -94,6 +103,15 @@ Play.prototype = {
       console.log(this.sequence)
       this.sequence = []
     }
+  }
+, playBash: function(playerSeq, enemySeq) {
+    var playerSeq = ['kick']
+      , enemySeq = ['punch', 'punch', 'jump', 'duck']
+
+    var _this = this
+    enemySeq.forEach(function(moveName) {
+      _this.enemy.move(moveName)
+    })
   }
 }
 
