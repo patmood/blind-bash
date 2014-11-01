@@ -18,6 +18,8 @@ var Player = function(game, x, y, enemy) {
     this.scale.y = 2
   }
 
+  this.score = 0
+
 }
 
 Player.prototype = Object.create(Phaser.Sprite.prototype)
@@ -29,6 +31,10 @@ Player.prototype.move = function(moveName) {
   this.game.time.events.add(Phaser.Timer.SECOND * 0.3, function() {
     this.frame = 0
   }, this)
+}
+
+Player.prototype.successMove = function() {
+  this.score += 1
 }
 
 module.exports = Player

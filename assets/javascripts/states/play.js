@@ -43,6 +43,8 @@ Play.prototype = {
 
   }
 , update: function() {
+    this.game.debug.text(this.player.score, 300, 100)
+    this.game.debug.text(this.enemy.score, 450, 100)
 
   }
 , move: function(item) {
@@ -77,14 +79,29 @@ Play.prototype = {
   }
 , checkDamage: function(playerMove, enemyMove) {
     console.log(playerMove, 'vs', enemyMove)
-    if (playerMove == enemyMove) {
-      var _this = this
-      this.impact.frame = this.game.rnd.integerInRange(0, 2)
-      this.impact.visible = true
-      this.game.time.events.add(Phaser.Timer.SECOND * 0.2, function() {
-        _this.impact.visible = false
-      }, this)
+    var _this = this
+      , impactFlag = false
+
+    if ((playerMove == 'kick' && enemyMove != 'jump') ||
+        (playerMove == 'punch' && enemyMove != 'duck')) {
+      this.player.successMove()
+      impactFlag = true
     }
+
+    if ((enemyMove == 'kick' && playerMove != 'jump') ||
+        (enemyMove == 'punch' && playerMove != 'duck')) {
+      this.enemy.successMove()
+      impactFlag = true
+    }
+
+  }
+, showImpact: function() {
+    var _this = this
+    this.impact.frame = this.game.rnd.integerInRange(0, 2)
+    this.impact.visible = true
+    this.game.time.events.add(Phaser.Timer.SECOND * 0.2, function() {
+      _this.impact.visible = false
+    }, this)
   }
 }
 

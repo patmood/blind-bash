@@ -32,6 +32,8 @@ var Player = function(game, x, y, enemy) {
     this.scale.y = 2
   }
 
+  this.score = 0
+
 }
 
 Player.prototype = Object.create(Phaser.Sprite.prototype)
@@ -43,6 +45,10 @@ Player.prototype.move = function(moveName) {
   this.game.time.events.add(Phaser.Timer.SECOND * 0.3, function() {
     this.frame = 0
   }, this)
+}
+
+Player.prototype.successMove = function() {
+  this.score += 1
 }
 
 module.exports = Player
@@ -93,6 +99,8 @@ Play.prototype = {
 
   }
 , update: function() {
+    this.game.debug.text(this.player.score, 300, 100)
+    this.game.debug.text(this.enemy.score, 450, 100)
 
   }
 , move: function(item) {
@@ -127,14 +135,29 @@ Play.prototype = {
   }
 , checkDamage: function(playerMove, enemyMove) {
     console.log(playerMove, 'vs', enemyMove)
-    if (playerMove == enemyMove) {
-      var _this = this
-      this.impact.frame = this.game.rnd.integerInRange(0, 2)
-      this.impact.visible = true
-      this.game.time.events.add(Phaser.Timer.SECOND * 0.2, function() {
-        _this.impact.visible = false
-      }, this)
+    var _this = this
+      , impactFlag = false
+
+    if ((playerMove == 'kick' && enemyMove != 'jump') ||
+        (playerMove == 'punch' && enemyMove != 'duck')) {
+      this.player.successMove()
+      impactFlag = true
     }
+
+    if ((enemyMove == 'kick' && playerMove != 'jump') ||
+        (enemyMove == 'punch' && playerMove != 'duck')) {
+      this.enemy.successMove()
+      impactFlag = true
+    }
+
+  }
+, showImpact: function() {
+    var _this = this
+    this.impact.frame = this.game.rnd.integerInRange(0, 2)
+    this.impact.visible = true
+    this.game.time.events.add(Phaser.Timer.SECOND * 0.2, function() {
+      _this.impact.visible = false
+    }, this)
   }
 }
 
