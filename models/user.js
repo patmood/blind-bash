@@ -3,7 +3,6 @@ var mongoose = require('mongoose')
   , findOrCreate = require('mongoose-findorcreate')
 
 var UserSchema = new Schema({
-  id: String,
   name: String,
   screen_name: String,
   location: String,

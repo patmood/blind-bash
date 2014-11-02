@@ -19,14 +19,34 @@ exports.setup = function() {
 exports.seed = function() {
   var User = require('./models/user.js')
     , Move = require('./models/move.js')
+    , allMoves = ['punch', 'kick', 'duck', 'jump']
+    , faker = require('faker')
+    , _ = require('lodash')
 
-  var aMove = new Move({
-    user_id: Math.floor(Math.random()*1000000).toString()
-  , moves: ['punch', 'kick', 'duck', 'jump', 'kick', 'kick']
+  User.remove({}, function(err) { console.log('Users removed') })
+  Move.remove({}, function(err) { console.log('Moves removed') })
+
+  var aUser = new User({
+    name: faker.name.findName(),
+    screen_name: faker.internet.userName(),
+    location: faker.address.city(),
+    profile_image_url: 'http://placekitten.com/g/64/64'
   })
 
-  aMove.save(function(err, result) {
-    if (err) throw err;
-    console.log(result)
+  aUser.save(function(err, result) {
+    if (err) throw err
+
+    var randMoves = []
+    for (var i = 0; i < 6; i++) { randMoves.push(_.sample(allMoves)) }
+
+    var aMove = new Move({
+      user_id: result._id
+    , moves: randMoves
+    })
+
+    aMove.save(function(err, result) {
+      if (err) throw err;
+    })
   })
+
 }

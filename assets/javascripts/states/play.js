@@ -1,28 +1,26 @@
 var Player = require('../prefabs/player')
 
-function Play() {}
+function Play() {
+  this.ready = false
+}
 Play.prototype = {
-  init: function() {
-    var _this = this
-    $.getJSON('/get_moves', function(enemyMoves) {
-      _this.enemyData = enemyMoves
-      console.log(enemyMoves)
-    })
-  }
-, preload: function() {
+  preload: function() {
+    this.load.onLoadComplete.addOnce(this.onLoadComplete, this)
     this.game.load.spritesheet('dude', 'images/tank_guy.png', 130, 160)
     this.game.load.spritesheet('impact', 'images/pow_wham_bam.png', 200, 156)
     this.game.load.image('button', 'images/button_green.png')
     this.playerSeq = []
   }
+, onLoadComplete: function() {
+    this.ready = true
+  }
 , create: function() {
+    var _this = this
     this.game.stage.backgroundColor = '#182d3b'
-
-    this.enemySeq = this.enemyData.moves
 
     // Add Players
     this.player = new Player(this.game, 350, 200)
-    this.enemy = new Player(this.game, 420, 200, 'daveo')
+    this.enemy = new Player(this.game, 420, 200, true)
     this.game.add.existing(this.player)
     this.game.add.existing(this.enemy)
 
@@ -30,6 +28,20 @@ Play.prototype = {
     this.impact = this.game.add.sprite(270, 20, 'impact')
     this.impact.visible = false
 
+    // Get Enemy
+    $.getJSON('/get_moves', function(enemyData) {
+      _this.enemyData = enemyData
+      _this.enemySeq = enemyData.moves.moves
+      _this.game.add.text(300
+                       , 50
+                       , 'Fighting @' + _this.enemyData.user.screen_name
+                       , { font: "24px Arial", fill: "#fff", align: "center" })
+      _this.game.add.text(300
+                       , 90
+                       , _this.enemyData.user.location
+                       , { font: "18px Arial", fill: "#fff", align: "center" })
+      console.log(enemyData)
+    })
 
     // Add buttons
     var punchButton = this.game.add.button(400, gHeight - 130, 'button', this.move, this)
