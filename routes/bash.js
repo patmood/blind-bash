@@ -9,9 +9,9 @@ router.get('/', function(req, res) {
 
 router.get('/moves', function(req, res) {
   Move.findOneRandom(function(err, move) {
-    if (err) throw err
+    if (err) console.error(err)
     User.findById(move.user_id, function(err, user) {
-      if (err) throw err
+      if (err) console.error(err)
       return res.json({ enemy: user, moves: move, user: req.user });
     })
   })
