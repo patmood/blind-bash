@@ -380,7 +380,7 @@ Play.prototype = {
     this.checkEnd()
   }
 , checkEnd: function() {
-    if (this.playerSeq.length >= 6) {
+    if (this.playerSeq.length >= 15) {
       this.game.state.start('bash', true, false, { playerSeq: this.playerSeq
                                                  , enemySeq: this.enemySeq })
     }

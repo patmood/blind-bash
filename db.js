@@ -26,27 +26,29 @@ exports.seed = function() {
   User.remove({}, function(err) { console.log('Users removed') })
   Move.remove({}, function(err) { console.log('Moves removed') })
 
-  var aUser = new User({
-    name: faker.name.findName(),
-    screen_name: faker.internet.userName(),
-    location: faker.address.city(),
-    profile_image_url: 'http://placekitten.com/g/64/64'
-  })
-
-  aUser.save(function(err, result) {
-    if (err) throw err
-
-    var randMoves = []
-    for (var i = 0; i < 6; i++) { randMoves.push(_.sample(allMoves)) }
-
-    var aMove = new Move({
-      user_id: result._id
-    , moves: randMoves
+  for (var u = 0; u < 20; u ++) {
+    var aUser = new User({
+      name: faker.name.findName(),
+      screen_name: faker.internet.userName(),
+      location: faker.address.city(),
+      profile_image_url: 'http://placekitten.com/g/64/64'
     })
 
-    aMove.save(function(err, result) {
-      if (err) throw err;
+    aUser.save(function(err, result) {
+      if (err) throw err
+
+      var randMoves = []
+      for (var i = 0; i < 15; i++) { randMoves.push(_.sample(allMoves)) }
+
+      var aMove = new Move({
+        user_id: result._id
+      , moves: randMoves
+      })
+
+      aMove.save(function(err, result) {
+        if (err) throw err;
+      })
     })
-  })
+  }
 
 }
