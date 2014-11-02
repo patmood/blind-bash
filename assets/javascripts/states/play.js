@@ -40,7 +40,7 @@ Play.prototype = {
                        , { font: "24px Arial", fill: "#fff", align: "center" })
       _this.game.add.text(400
                        , 90
-                       , _this.enemyData.user.location
+                       , 'From ' + _this.enemyData.user.location
                        , { font: "18px Arial", fill: "#fff", align: "center" })
       console.log(enemyData)
     })

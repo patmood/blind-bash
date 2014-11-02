@@ -26,23 +26,39 @@ Bash.prototype = {
     this.enemy = new Player(this.game, 420, 200, 'daveo')
     this.game.add.existing(this.player)
     this.game.add.existing(this.enemy)
+    this.player.visible = false
+    this.enemy.visible = false
 
     // Add buttons
-    this.game.add.button(300, gHeight - 130, 'button', function() {
+    this.resetButton = this.game.add.button(300, gHeight - 130, 'button', function() {
       this.game.state.start('play', true, false)
     }, this)
+    this.resetButton.visible = false
 
     // Add impact graphics
     this.impact = this.game.add.sprite(270, 20, 'impact')
     this.impact.visible = false
 
-    // Play bash
-    this.playBash(this.playerSeq, this.enemySeq)
-
+    this.setStage()
   }
 , update: function() {
     this.game.debug.text(this.player.score, 300, 100)
     this.game.debug.text(this.enemy.score, 450, 100)
+  }
+, setStage: function() {
+    this.text = this.game.add.text(this.game.world.centerX
+                     , 200
+                     , 'Let\'s see how you went...'
+                     , { font: "60px Arial", fill: "#fff", align: "center" })
+    this.text.anchor.set(0.5)
+
+    // Play bash
+    this.game.input.onDown.addOnce(function(){
+      this.text.text = ''
+      this.player.visible = true
+      this.enemy.visible = true
+      this.playBash(this.playerSeq, this.enemySeq)
+    }, this)
   }
 , playBash: function(playerSeq, enemySeq) {
     var _this = this
@@ -50,7 +66,7 @@ Bash.prototype = {
 
     function makeMove(i) {
       _this.game.time.events.add(Phaser.Timer.SECOND * 0.5, function() {
-        if (i >= enemySeq.length ) return;
+        if (i >= enemySeq.length ) return _this.endGame();
         if (_this.player.stunned) playerSeq[i] = 'stunned'
         if (_this.enemy.stunned) enemySeq[i] = 'stunned'
         _this.player.stunned = false
@@ -102,6 +118,16 @@ Bash.prototype = {
     this.game.time.events.add(Phaser.Timer.SECOND * 0.2, function() {
       _this.impact.visible = false
     }, this)
+  }
+, endGame: function() {
+    var diff = this.player.score - this.enemy.score
+    var text
+    if (diff > 0) { text = 'You won!' }
+    if (diff < 0) { text = 'You lost!' }
+    if (diff == 0) { text = 'Draw!' }
+
+    this.text.text = text
+    this.resetButton.visible = true
   }
 }
 
