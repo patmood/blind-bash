@@ -382,13 +382,13 @@ Play.prototype = {
 , update: function() {
   }
 , move: function(item) {
-    if (this.playerSeq >= 6) return;
+    if (this.playerSeq >= 10) return;
     this.player.move(item.moveName)
     this.playerSeq.push(item.moveName)
     this.checkEnd()
   }
 , checkEnd: function() {
-    if (this.playerSeq.length >= 15) {
+    if (this.playerSeq.length >= 10) {
       this.game.state.start('bash', true, false, { playerSeq: this.playerSeq
                                                  , enemySeq: this.enemySeq })
     }

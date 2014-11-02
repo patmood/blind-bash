@@ -38,7 +38,7 @@ exports.seed = function() {
       if (err) throw err
 
       var randMoves = []
-      for (var i = 0; i < 15; i++) { randMoves.push(_.sample(allMoves)) }
+      for (var i = 0; i < 10; i++) { randMoves.push(_.sample(allMoves)) }
 
       var aMove = new Move({
         user_id: result._id
