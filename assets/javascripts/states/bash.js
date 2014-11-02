@@ -5,6 +5,16 @@ Bash.prototype = {
   init: function(params) {
     this.playerSeq = params.playerSeq
     this.enemySeq = params.enemySeq
+    $.ajax({
+      type: 'post'
+    , contentType: 'application/json'
+    , data: JSON.stringify({ moves: this.playerSeq })
+    , url: '/save_moves'
+    , success: function(res) {
+        console.log(res)
+      }
+    })
+
   }
 , preload: function() {
   }

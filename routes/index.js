@@ -1,59 +1,28 @@
-var express = require('express');
-var router = express.Router();
-
-var mongoose = require('mongoose')
-  , uriUtil = require('mongodb-uri')
-  , options = { server: { socketOptions: { keepAlive: 1, connectTimeoutMS: 30000 } },
-                replset: { socketOptions: { keepAlive: 1, connectTimeoutMS : 30000 } } }
-
-var mongodbUri = process.env['MONGOLAB_URI']
-  , mongooseUri = uriUtil.formatMongoose(mongodbUri)
-
-mongoose.connect(mongooseUri, options);
-
-var findOrCreate = require('mongoose-findorcreate')
-  , Schema = mongoose.Schema
-var UserSchema = new Schema({
-  id: String,
-  username: String,
-  displayName: String,
-  provider: String
-})
-UserSchema.plugin(findOrCreate)
-
-var User = mongoose.model('User', UserSchema)
-
-var passport = require('passport')
-  , TwitterStrategy = require('passport-twitter').Strategy
-
-passport.use(new TwitterStrategy({
-    consumerKey: process.env['TWITTER_KEY'],
-    consumerSecret: process.env['TWITTER_SECRET'],
-    callbackURL: process.env['DOMAIN'] + "/auth/twitter/callback"
-  },
-  function(token, tokenSecret, profile, done) {
-    console.log(profile)
-    User.findOrCreate(profile, function(err, user) {
-      if (err) { return done(err); }
-      console.log(user)
-      done(null, user);
-    });
-  }
-));
-
-passport.serializeUser(function(user, done) {
-  done(null, user);
-});
-
-passport.deserializeUser(function(user, done) {
-  done(null, user);
-});
+var express = require('express')
+  , router = express.Router()
+  , User = require('../models/user.js')
+  , Move = require('../models/move.js')
 
 // ACTUAL ROUTES:
+router.post('/save_moves', function(req, res) {
+  if (!req.user) return res.status(401).send('Please sign in to save moves');
+  User.find(req.user, function(err, user) {
+    if (err) throw err;
+    Move.create({ user_id: user._id, moves: req.body.moves }, function(err, result) {
+      if (err) throw err
+      return res.json(result.toObject())
+    })
+  })
+})
+
+router.get('/get_moves', function(req, res) {
+  Move.findOneRandom(function(err, result) {
+    return res.json(result)
+  })
+})
 
 router.get('/', function(req, res) {
-  console.log('USER:', req.user)
-  res.render('index', { title: 'Express' });
+  res.render('index', { title: 'Blind Bash' });
 });
 
 module.exports = router;

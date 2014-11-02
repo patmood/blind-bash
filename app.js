@@ -10,8 +10,12 @@ var passport = require('passport')
 var dotenv = require('dotenv')
 dotenv.load()
 
-var routes = require('./routes/index');
-var users = require('./routes/bash');
+var routes = require('./routes/index')
+  , bash = require('./routes/bash')
+  , db = require('./db')
+
+db.setup()
+db.seed()
 
 var app = express();
 
@@ -31,13 +35,15 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(passport.initialize());
 app.use(passport.session());
 
+require('./lib/passport.js')(app)
+
 // Auth
 app.get('/auth/twitter', passport.authenticate('twitter'))
 app.get('/auth/twitter/callback',
-  passport.authenticate('twitter', { successRedirect: '/',
+  passport.authenticate('twitter', { successRedirect: '/bash',
                                      failureRedirect: '/login' }))
 app.use('/', routes);
-app.use('/bash', users);
+app.use('/bash', bash);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

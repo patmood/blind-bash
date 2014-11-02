@@ -2,15 +2,23 @@ var Player = require('../prefabs/player')
 
 function Play() {}
 Play.prototype = {
-  preload: function() {
+  init: function() {
+    var _this = this
+    $.getJSON('/get_moves', function(enemyMoves) {
+      _this.enemyData = enemyMoves
+      console.log(enemyMoves)
+    })
+  }
+, preload: function() {
     this.game.load.spritesheet('dude', 'images/tank_guy.png', 130, 160)
     this.game.load.spritesheet('impact', 'images/pow_wham_bam.png', 200, 156)
     this.game.load.image('button', 'images/button_green.png')
     this.playerSeq = []
-    this.enemySeq =['punch', 'punch', 'jump', 'duck', 'punch', 'kick']
   }
 , create: function() {
     this.game.stage.backgroundColor = '#182d3b'
+
+    this.enemySeq = this.enemyData.moves
 
     // Add Players
     this.player = new Player(this.game, 350, 200)

@@ -1,7 +1,8 @@
-var express = require('express');
-var router = express.Router();
+var express = require('express')
+  , router = express.Router()
+  , User = require('../models/user.js')
+  , Move = require('../models/move.js')
 
-/* GET users listing. */
 router.get('/', function(req, res) {
   res.render('bash');
 });
