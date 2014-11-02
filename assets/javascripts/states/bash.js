@@ -49,19 +49,20 @@ Bash.prototype = {
     this.setStage()
   }
 , update: function() {
-    this.game.debug.text(this.player.score, 300, 100)
-    this.game.debug.text(this.enemy.score, 450, 100)
+    // this.game.debug.text(this.player.score, 300, 100)
+    // this.game.debug.text(this.enemy.score, 450, 100)
   }
 , setStage: function() {
-    this.text = this.game.add.text(this.game.world.centerX
-                     , 200
-                     , 'Let\'s see how you went...'
-                     , { font: "60px Arial", fill: "#fff", align: "center" })
-    this.text.anchor.set(0.5)
+    this.line1 = this.game.add.bitmapText(10
+                , 10
+                , 'regFont'
+                , 'Let\'s see how you went...'
+                , 36)
+    this.line1.x = this.game.width * 0.5 - this.line1.textWidth * 0.5
 
     // Play bash
     this.game.input.onDown.addOnce(function(){
-      this.text.text = ''
+      this.line1.text = ''
       this.player.visible = true
       this.enemy.visible = true
       this.playBash(this.playerSeq, this.enemySeq)
@@ -133,7 +134,8 @@ Bash.prototype = {
     if (diff < 0) { text = 'You lost!' }
     if (diff == 0) { text = 'Draw!' }
 
-    this.text.text = text
+    this.line1.text = text
+    this.line1.x = this.game.width * 0.5 - this.line1.textWidth * 0.5
     this.resetButton.visible = true
   }
 }

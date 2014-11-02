@@ -6,6 +6,7 @@ function Play() {
 Play.prototype = {
   preload: function() {
     this.load.onLoadComplete.addOnce(this.onLoadComplete, this)
+    this.load.bitmapFont('regFont', 'images/font.png', 'images/font.fnt')
     this.game.load.spritesheet('dude', 'images/tank_guy.png', 130, 160)
     this.game.load.spritesheet('impact', 'images/pow_wham_bam.png', 200, 156)
     this.game.load.image('button', 'images/button_green.png')
@@ -41,14 +42,19 @@ Play.prototype = {
     $.getJSON('/get_moves', function(enemyData) {
       _this.enemyData = enemyData
       _this.enemySeq = enemyData.moves.moves
-      _this.game.add.text(halfWidth * 0.5
-                       , 30
-                       , 'Fighting @' + _this.enemyData.user.screen_name
-                       , { font: "24px Arial", fill: "#fff"})
-      _this.game.add.text(halfWidth * 0.5
-                       , 90
-                       , 'From ' + _this.enemyData.user.location
-                       , { font: "18px Arial", fill: "#fff"})
+      var line1 = _this.game.add.bitmapText(10
+                  , 10
+                  , 'regFont'
+                  , 'Fighting @' + _this.enemyData.user.screen_name
+                  , 36)
+      line1.x = _this.game.width * 0.5 - line1.textWidth * 0.5
+
+      var line2 = _this.game.add.bitmapText(10
+                  , 50
+                  , 'regFont'
+                  , 'From ' + _this.enemyData.user.location
+                  , 24)
+      line2.x = _this.game.width * 0.5 - line2.textWidth * 0.5
       console.log(enemyData)
     })
 
