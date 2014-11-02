@@ -137,6 +137,12 @@ Bash.prototype = {
     this.line1.text = text
     this.line1.x = this.game.width * 0.5 - this.line1.textWidth * 0.5
     this.resetButton.visible = true
+    var resetText = this.game.add.bitmapText(0
+                , this.game.height - (this.resetButton.height * 0.3)
+                , 'regFont'
+                , 'Play Again'
+                , 42)
+    resetText.x = this.resetButton.x + this.resetButton.width * 0.5 - resetText.textWidth * 0.5
   }
 }
 

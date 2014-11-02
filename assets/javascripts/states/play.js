@@ -59,26 +59,54 @@ Play.prototype = {
     })
 
     // Add buttons
-    var punchButton = this.game.add.button(halfWidth, quarterHeight * 2, 'red', this.move, this)
+    var punchButton = this.game.add.button(halfWidth, quarterHeight * 3, 'red', this.move, this)
     punchButton.moveName = 'punch'
     punchButton.width = halfWidth
     punchButton.height = quarterHeight
 
-    var kickButton = this.game.add.button(halfWidth, quarterHeight * 3, 'green', this.move, this)
+    var kickButton = this.game.add.button(halfWidth, quarterHeight * 2, 'green', this.move, this)
     kickButton.moveName = 'kick'
     kickButton.width = halfWidth
     kickButton.height = quarterHeight
 
-    var jumpButton = this.game.add.button(0, quarterHeight * 2, 'blue', this.move, this)
+    var jumpButton = this.game.add.button(0, quarterHeight * 3, 'blue', this.move, this)
     jumpButton.moveName = 'jump'
     jumpButton.width = halfWidth
     jumpButton.height = quarterHeight
 
-    var duckButton = this.game.add.button(0, quarterHeight * 3, 'yellow', this.move, this)
+    var duckButton = this.game.add.button(0, quarterHeight * 2, 'yellow', this.move, this)
     duckButton.moveName = 'duck'
     duckButton.width = halfWidth
     duckButton.height = quarterHeight
 
+    // Button Text
+    var punchText = this.game.add.bitmapText(0
+                , punchButton.y - punchButton.height * 0.5
+                , 'regFont'
+                , 'Punch'
+                , 36)
+    punchText.x = punchButton.x + punchButton.width * 0.5 - punchText.textWidth * 0.5
+
+    var kickText = this.game.add.bitmapText(0
+                , this.game.height - kickButton.height * 0.5
+                , 'regFont'
+                , 'Kick'
+                , 36)
+    kickText.x = kickButton.x + kickButton.width * 0.5 - kickText.textWidth * 0.5
+
+    var jumpText = this.game.add.bitmapText(0
+                , jumpButton.y - jumpButton.height * 0.5
+                , 'regFont'
+                , 'Jump'
+                , 36)
+    jumpText.x = jumpButton.x + jumpButton.width * 0.5 - jumpText.textWidth * 0.5
+
+    var duckText = this.game.add.bitmapText(0
+                , this.game.height - duckButton.height * 0.5
+                , 'regFont'
+                , 'Duck'
+                , 36)
+    duckText.x = duckButton.x + duckButton.width * 0.5 - duckText.textWidth * 0.5
   }
 , update: function() {
   }
