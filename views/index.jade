@@ -3,7 +3,20 @@ extends layout
 block content
   .landing-page
     h1 Blind Bash!
-    h2 Compete in a blindfolded fight against random people on twitter
-    a(href="/auth/twitter") Sign in with Twitter
+    h3
+      |by <a href="https://twitter.com/patmood">@patmood</a>
+    .logo
+      img(src="/images/blind_bash_guy.png")
+    h2 Compete in a blindfolded fight against random people on twitter!
+    p Take a swing at your opponent without seeing their moves. The fight will be played out once each person has recorded their strategy and a winner is determined.
+    a(href="/auth/twitter")
+      img(src="/images/twitter.png" alt="Sign in with Twitter")
     br
     a(href="/bash") Play as guest
+    br
+    br
+    hr
+    h2 About:
+    p Blind Bash was created in one weekend at the Cardinal Game Jam on Nov 1st, 2014. It is inspired by the street fighting games I used to lose at when I was younger.
+    p Since my strategy is to hit buttons randomly, why does it need to be realtime? I wanted to bring the same helpless experience to modern social media, where I could challenge friends online.
+    p I'd like to extend this concept to have ongoing matches with friends where you can learn their tactics and track past scores.

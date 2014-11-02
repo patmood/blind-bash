@@ -3,10 +3,16 @@ html, body {
   margin: 0px;
   padding: 0px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background: url('/images/geometry.png') repeat;
 }
 
 a {
   color: #00B7FF;
+}
+
+h1 {
+  font-size: 60px;
+  margin: 0px;
 }
 
 .landing-page {
@@ -17,4 +23,5 @@ a {
   border: solid 1px #888;
   border-radius: 5px;
   text-align: center;
+  background-color: #fff;
 }
