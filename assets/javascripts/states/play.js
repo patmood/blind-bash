@@ -15,6 +15,7 @@ Play.prototype = {
     this.game.load.image('red', 'images/red.png')
     this.game.load.image('yellow', 'images/yellow.png')
     this.game.load.image('blue', 'images/blue.png')
+    this.game.load.image('ring', 'images/boxingring.jpg')
     this.load.audio('hit', 'sound/hit.wav')
     this.load.audio('jump', 'sound/jump.wav')
     this.playerSeq = []

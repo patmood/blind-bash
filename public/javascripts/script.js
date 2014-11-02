@@ -91,11 +91,18 @@ Bash.prototype = {
     }
   }
 , create: function() {
-    this.game.stage.backgroundColor = '#F23838'
-    this.hitFx = this.game.add.audio('hit')
-
     var halfWidth = this.game.width / 2
     var quarterHeight = this.game.height / 4
+    this.game.stage.backgroundColor = '#000'
+
+    this.ring = this.game.add.sprite(0, quarterHeight, 'ring')
+    this.ring.anchor.setTo(0, 1)
+    var ringScale = this.game.width / this.ring.width
+    this.ring.scale = { x: ringScale, y: ringScale }
+    this.ring.x = 0
+    this.ring.y = this.game.height * 0.5
+
+    this.hitFx = this.game.add.audio('hit')
 
     // Add Players
     this.player = new Player(this.game, halfWidth, quarterHeight * 2)
@@ -152,12 +159,12 @@ Bash.prototype = {
                 , 36)
 
     // Play bash
-    this.game.input.onDown.addOnce(function(){
+    // this.game.input.onDown.addOnce(function(){
       this.line1.text = ''
       this.player.visible = true
       this.enemy.visible = true
       this.playBash(this.playerSeq, this.enemySeq)
-    }, this)
+    // }, this)
   }
 , playBash: function(playerSeq, enemySeq) {
     var _this = this
@@ -260,6 +267,7 @@ Play.prototype = {
     this.game.load.image('red', 'images/red.png')
     this.game.load.image('yellow', 'images/yellow.png')
     this.game.load.image('blue', 'images/blue.png')
+    this.game.load.image('ring', 'images/boxingring.jpg')
     this.load.audio('hit', 'sound/hit.wav')
     this.load.audio('jump', 'sound/jump.wav')
     this.playerSeq = []
