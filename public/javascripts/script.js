@@ -107,6 +107,9 @@ Bash.prototype = {
     this.impact = this.game.add.sprite(halfWidth, quarterHeight, 'impact')
     this.impact.visible = false
     this.impact.anchor.setTo(0.5, 0.5)
+    this.juicy = this.game.plugins.add(new Phaser.Plugin.Juicy(this))
+    this.screenFlash = this.juicy.createScreenFlash()
+    this.add.existing(this.screenFlash)
 
     this.setStage()
   }
@@ -185,6 +188,8 @@ Bash.prototype = {
     var _this = this
     this.impact.frame = this.game.rnd.integerInRange(0, 2)
     this.impact.visible = true
+    this.juicy.shake()
+    this.screenFlash.flash()
     this.game.time.events.add(Phaser.Timer.SECOND * 0.2, function() {
       _this.impact.visible = false
     }, this)
@@ -320,6 +325,7 @@ Play.prototype = {
                 , 'Duck'
                 , 36)
     duckText.x = duckButton.x + duckButton.width * 0.5 - duckText.textWidth * 0.5
+
   }
 , update: function() {
   }

@@ -107,6 +107,7 @@ Play.prototype = {
                 , 'Duck'
                 , 36)
     duckText.x = duckButton.x + duckButton.width * 0.5 - duckText.textWidth * 0.5
+
   }
 , update: function() {
   }
