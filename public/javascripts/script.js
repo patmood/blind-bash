@@ -2,8 +2,8 @@
 var game, gWidth, hHeight
 
 window.onload = function () {
-  gWidth = 800 //window.innerWidth // 320
-  gHeight = 600 //window.innerHeight // 480
+  gWidth = window.innerWidth // 800
+  gHeight = window.innerHeight // 600
   var game = new Phaser.Game(gWidth, gHeight, Phaser.AUTO, 'game');
 
   game.state.add('play', require('./states/play'))
@@ -206,6 +206,10 @@ Play.prototype = {
     this.game.load.spritesheet('impact', 'images/pow_wham_bam.png', 200, 156)
     this.game.load.image('button', 'images/button_green.png')
     this.game.load.image('question', 'images/question_mark.png')
+    this.game.load.image('green', 'images/green.png')
+    this.game.load.image('red', 'images/red.png')
+    this.game.load.image('yellow', 'images/yellow.png')
+    this.game.load.image('blue', 'images/blue.png')
     this.playerSeq = []
   }
 , onLoadComplete: function() {
@@ -242,17 +246,27 @@ Play.prototype = {
     })
 
     // Add buttons
-    var punchButton = this.game.add.button(400, gHeight - 130, 'button', this.move, this)
+    var halfWidth = this.game.width / 2
+    var quarterHeight = this.game.height / 4
+    var punchButton = this.game.add.button(halfWidth, quarterHeight * 2, 'red', this.move, this)
     punchButton.moveName = 'punch'
+    punchButton.width = halfWidth
+    punchButton.height = quarterHeight
 
-    var kickButton = this.game.add.button(400, gHeight - 200, 'button', this.move, this)
+    var kickButton = this.game.add.button(halfWidth, quarterHeight * 3, 'green', this.move, this)
     kickButton.moveName = 'kick'
+    kickButton.width = halfWidth
+    kickButton.height = quarterHeight
 
-    var jumpButton = this.game.add.button(200, gHeight - 130, 'button', this.move, this)
+    var jumpButton = this.game.add.button(0, quarterHeight * 2, 'blue', this.move, this)
     jumpButton.moveName = 'jump'
+    jumpButton.width = halfWidth
+    jumpButton.height = quarterHeight
 
-    var duckButton = this.game.add.button(200, gHeight - 200, 'button', this.move, this)
+    var duckButton = this.game.add.button(0, quarterHeight * 3, 'yellow', this.move, this)
     duckButton.moveName = 'duck'
+    duckButton.width = halfWidth
+    duckButton.height = quarterHeight
 
   }
 , update: function() {
