@@ -65,7 +65,7 @@ Bash.prototype = {
     makeMove(0)
   }
 , checkDamage: function(playerMove, enemyMove) {
-    console.log(playerMove, 'vs', enemyMove)
+    // console.log(playerMove, 'vs', enemyMove)
     var _this = this
       , impactFlag = false
 

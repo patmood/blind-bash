@@ -9,6 +9,7 @@ Play.prototype = {
     this.game.load.spritesheet('dude', 'images/tank_guy.png', 130, 160)
     this.game.load.spritesheet('impact', 'images/pow_wham_bam.png', 200, 156)
     this.game.load.image('button', 'images/button_green.png')
+    this.game.load.image('question', 'images/question_mark.png')
     this.playerSeq = []
   }
 , onLoadComplete: function() {
@@ -27,16 +28,17 @@ Play.prototype = {
     // Add impact graphics
     this.impact = this.game.add.sprite(270, 20, 'impact')
     this.impact.visible = false
+    this.impact = this.game.add.sprite(450, 150, 'question')
 
     // Get Enemy
     $.getJSON('/get_moves', function(enemyData) {
       _this.enemyData = enemyData
       _this.enemySeq = enemyData.moves.moves
-      _this.game.add.text(300
+      _this.game.add.text(400
                        , 50
                        , 'Fighting @' + _this.enemyData.user.screen_name
                        , { font: "24px Arial", fill: "#fff", align: "center" })
-      _this.game.add.text(300
+      _this.game.add.text(400
                        , 90
                        , _this.enemyData.user.location
                        , { font: "18px Arial", fill: "#fff", align: "center" })
