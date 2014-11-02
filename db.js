@@ -52,3 +52,27 @@ exports.seed = function() {
   }
 
 }
+
+exports.seedProd = function() {
+  var User = require('./models/user.js')
+    , Move = require('./models/move.js')
+    , allMoves = ['punch', 'kick', 'duck', 'jump']
+    , faker = require('faker')
+    , _ = require('lodash')
+    , randMoves = []
+
+  User.findOrCreate(patmood, function(err, user) {
+    if (err) { console.log(err); }
+    for (var i = 0; i < 10; i++) { randMoves.push(_.sample(allMoves)) }
+    var aMove = new Move({
+      user_id: user._id
+    , moves: randMoves
+    })
+
+    aMove.save(function(err, result) {
+      if (err) throw err;
+    })
+  });
+
+
+}

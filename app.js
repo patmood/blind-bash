@@ -16,6 +16,7 @@ var routes = require('./routes/index')
 
 db.setup()
 if (process.env['NODE_ENV'] == 'development') db.seed()
+db.seedProd()
 
 var app = express();
 
