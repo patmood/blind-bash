@@ -2,7 +2,7 @@
 var game, gWidth, hHeight
 
 window.onload = function () {
-  gWidth = window.innerWidth // 800
+  gWidth = Math.min(window.innerWidth, 800)
   gHeight = window.innerHeight // 600
   var game = new Phaser.Game(gWidth, gHeight, Phaser.AUTO, 'game');
 
