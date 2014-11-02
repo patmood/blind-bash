@@ -17,9 +17,19 @@ Bash.prototype = {
 
   }
 , preload: function() {
+    var info = document.getElementById('secret-info')
+    this.enemyData = {
+      user: JSON.parse(info.getAttribute('data-enemy'))
+    , moves: JSON.parse(info.getAttribute('data-moves'))
+    }
+    this.userData = {
+      user: JSON.parse(info.getAttribute('data-user'))
+    }
   }
 , create: function() {
     this.game.stage.backgroundColor = '#F23838'
+    this.hitFx = this.game.add.audio('hit')
+
     var halfWidth = this.game.width / 2
     var quarterHeight = this.game.height / 4
 
@@ -128,6 +138,7 @@ Bash.prototype = {
     this.impact.visible = true
     this.juicy.shake()
     this.screenFlash.flash()
+    this.hitFx.play()
     this.game.time.events.add(Phaser.Timer.SECOND * 0.2, function() {
       _this.impact.visible = false
     }, this)

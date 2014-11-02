@@ -14,16 +14,17 @@ window.onload = function () {
 
 },{"./states/bash":3,"./states/play":4}],2:[function(require,module,exports){
 var moveFrames = {
-  'punch': 1
-, 'kick': 2
-, 'jump': 3
-, 'duck': 4
+  'kick': 1
+, 'punch': 2
+, 'duck': 3
+, 'jump': 4
 , 'stunned': 0
 }
 
 var Player = function(game, x, y, enemy) {
   Phaser.Sprite.call(this, game, x, y, 'dude', 0);
 
+  this.jumpFx = this.game.add.audio('jump')
   var scaleFactor = (this.game.height / 2) / 160
 
   // Set the pivot point for this sprite to the center
@@ -48,6 +49,7 @@ Player.prototype.constructor = Player
 Player.prototype.move = function(moveName) {
   var _this = this
   this.frame = moveFrames[moveName]
+  if (moveName == 'jump') this.jumpFx.play()
   this.game.time.events.add(Phaser.Timer.SECOND * 0.3, function() {
     this.frame = 0
   }, this)
@@ -79,9 +81,19 @@ Bash.prototype = {
 
   }
 , preload: function() {
+    var info = document.getElementById('secret-info')
+    this.enemyData = {
+      user: JSON.parse(info.getAttribute('data-enemy'))
+    , moves: JSON.parse(info.getAttribute('data-moves'))
+    }
+    this.userData = {
+      user: JSON.parse(info.getAttribute('data-user'))
+    }
   }
 , create: function() {
     this.game.stage.backgroundColor = '#F23838'
+    this.hitFx = this.game.add.audio('hit')
+
     var halfWidth = this.game.width / 2
     var quarterHeight = this.game.height / 4
 
@@ -190,6 +202,7 @@ Bash.prototype = {
     this.impact.visible = true
     this.juicy.shake()
     this.screenFlash.flash()
+    this.hitFx.play()
     this.game.time.events.add(Phaser.Timer.SECOND * 0.2, function() {
       _this.impact.visible = false
     }, this)
@@ -233,7 +246,19 @@ Play.prototype = {
     this.game.load.image('red', 'images/red.png')
     this.game.load.image('yellow', 'images/yellow.png')
     this.game.load.image('blue', 'images/blue.png')
+    this.load.audio('hit', 'sound/hit.wav')
+    this.load.audio('jump', 'sound/jump.wav')
     this.playerSeq = []
+
+    var info = document.getElementById('secret-info')
+    this.enemyData = {
+      user: JSON.parse(info.getAttribute('data-enemy'))
+    , moves: JSON.parse(info.getAttribute('data-moves'))
+    }
+
+    this.userData = {
+      user: JSON.parse(info.getAttribute('data-user'))
+    }
   }
 , onLoadComplete: function() {
     this.ready = true
@@ -257,49 +282,46 @@ Play.prototype = {
     this.question.anchor.setTo(0.5, 0.5)
 
     // Get Enemy
-    $.getJSON('/get_moves', function(enemyData) {
-      _this.enemyData = enemyData
-      _this.enemySeq = enemyData.moves.moves
-      var line1 = _this.game.add.bitmapText(10
-                  , 10
-                  , 'regFont'
-                  , 'Fighting @' + _this.enemyData.user.screen_name
-                  , 36)
-      line1.x = _this.game.width * 0.5 - line1.textWidth * 0.5
+    this.enemySeq = this.enemyData.moves.moves
+    var line1 = this.game.add.bitmapText(10
+                , 10
+                , 'regFont'
+                , 'Fighting @' + this.enemyData.user.screen_name
+                , 36)
+    line1.x = this.game.width * 0.5 - line1.textWidth * 0.5
 
-      var line2 = _this.game.add.bitmapText(10
-                  , 50
-                  , 'regFont'
-                  , 'From ' + _this.enemyData.user.location
-                  , 24)
-      line2.x = _this.game.width * 0.5 - line2.textWidth * 0.5
-      console.log(enemyData)
-    })
+    var line2 = this.game.add.bitmapText(10
+                , 50
+                , 'regFont'
+                , 'From ' + this.enemyData.user.location
+                , 24)
+    line2.x = this.game.width * 0.5 - line2.textWidth * 0.5
+    console.log(this.enemyData)
 
     // Add buttons
-    var punchButton = this.game.add.button(halfWidth, quarterHeight * 3, 'red', this.move, this)
+    var punchButton = this.game.add.button(halfWidth, quarterHeight * 2, 'red', this.move, this)
     punchButton.moveName = 'punch'
     punchButton.width = halfWidth
     punchButton.height = quarterHeight
 
-    var kickButton = this.game.add.button(halfWidth, quarterHeight * 2, 'green', this.move, this)
+    var kickButton = this.game.add.button(halfWidth, quarterHeight * 3, 'green', this.move, this)
     kickButton.moveName = 'kick'
     kickButton.width = halfWidth
     kickButton.height = quarterHeight
 
-    var jumpButton = this.game.add.button(0, quarterHeight * 3, 'blue', this.move, this)
+    var jumpButton = this.game.add.button(0, quarterHeight * 2, 'blue', this.move, this)
     jumpButton.moveName = 'jump'
     jumpButton.width = halfWidth
     jumpButton.height = quarterHeight
 
-    var duckButton = this.game.add.button(0, quarterHeight * 2, 'yellow', this.move, this)
+    var duckButton = this.game.add.button(0, quarterHeight * 3, 'yellow', this.move, this)
     duckButton.moveName = 'duck'
     duckButton.width = halfWidth
     duckButton.height = quarterHeight
 
     // Button Text
     var punchText = this.game.add.bitmapText(0
-                , punchButton.y - punchButton.height * 0.5
+                , punchButton.y + punchButton.height * 0.5
                 , 'regFont'
                 , 'Punch'
                 , 36)
@@ -313,7 +335,7 @@ Play.prototype = {
     kickText.x = kickButton.x + kickButton.width * 0.5 - kickText.textWidth * 0.5
 
     var jumpText = this.game.add.bitmapText(0
-                , jumpButton.y - jumpButton.height * 0.5
+                , jumpButton.y + jumpButton.height * 0.5
                 , 'regFont'
                 , 'Jump'
                 , 36)

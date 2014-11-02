@@ -15,16 +15,6 @@ router.post('/save_moves', function(req, res) {
   })
 })
 
-router.get('/get_moves', function(req, res) {
-  Move.findOneRandom(function(err, move) {
-    if (err) throw err
-    User.findById(move.user_id, function(err, user) {
-      if (err) throw err
-      return res.json({ moves: move, user: user })
-    })
-  })
-})
-
 router.get('/', function(req, res) {
   res.render('index', { title: 'Blind Bash' });
 });
