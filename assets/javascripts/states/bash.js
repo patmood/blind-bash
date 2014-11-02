@@ -20,24 +20,31 @@ Bash.prototype = {
   }
 , create: function() {
     this.game.stage.backgroundColor = '#F23838'
+    var halfWidth = this.game.width / 2
+    var quarterHeight = this.game.height / 4
 
     // Add Players
-    this.player = new Player(this.game, 350, 200)
-    this.enemy = new Player(this.game, 420, 200, 'daveo')
+    this.player = new Player(this.game, halfWidth, quarterHeight * 2)
+    this.enemy = new Player(this.game, halfWidth, quarterHeight * 2, true)
+    this.player.x = halfWidth - this.player.width * 0.2
+    this.enemy.x = halfWidth - this.enemy.width * 0.2
     this.game.add.existing(this.player)
     this.game.add.existing(this.enemy)
     this.player.visible = false
     this.enemy.visible = false
 
     // Add buttons
-    this.resetButton = this.game.add.button(300, gHeight - 130, 'button', function() {
+    this.resetButton = this.game.add.button(0, gHeight - quarterHeight , 'green', function() {
       this.game.state.start('play', true, false)
     }, this)
     this.resetButton.visible = false
+    this.resetButton.width = halfWidth * 2
+    this.resetButton.height = quarterHeight * 2
 
     // Add impact graphics
-    this.impact = this.game.add.sprite(270, 20, 'impact')
+    this.impact = this.game.add.sprite(halfWidth, quarterHeight, 'impact')
     this.impact.visible = false
+    this.impact.anchor.setTo(0.5, 0.5)
 
     this.setStage()
   }
