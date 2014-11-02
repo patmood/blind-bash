@@ -8,3 +8,13 @@ html, body {
 a {
   color: #00B7FF;
 }
+
+.landing-page {
+  margin: 30px auto;
+  width: 90%;
+  max-width: 600px;
+  padding: 15px;
+  border: solid 1px #888;
+  border-radius: 5px;
+  text-align: center;
+}

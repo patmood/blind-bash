@@ -23,10 +23,8 @@ exports.seed = function() {
     , faker = require('faker')
     , _ = require('lodash')
 
-  if (process.env['NODE_ENV'] == 'development') {
-    User.remove({}, function(err) { console.log('Users removed') })
-    Move.remove({}, function(err) { console.log('Moves removed') })
-  }
+  User.remove({}, function(err) { console.log('Users removed') })
+  Move.remove({}, function(err) { console.log('Moves removed') })
 
   for (var u = 0; u < 20; u ++) {
     var aUser = new User({
