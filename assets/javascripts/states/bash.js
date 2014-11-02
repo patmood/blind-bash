@@ -64,11 +64,19 @@ Bash.prototype = {
     this.screenFlash = this.juicy.createScreenFlash()
     this.add.existing(this.screenFlash)
 
+    // Scores
+    this.p1score = this.game.add.bitmapText(this.game.width * 0.25
+                                          , this.game.height * 0.55
+                                          , 'regFont', '', 60)
+    this.p2score = this.game.add.bitmapText(this.game.width * 0.75
+                                          , this.game.height * 0.55
+                                          , 'regFont', '', 60)
+
     this.setStage()
   }
 , update: function() {
-    // this.game.debug.text(this.player.score, 300, 100)
-    // this.game.debug.text(this.enemy.score, 450, 100)
+    this.p1score.text = this.player.score
+    this.p2score.text = this.enemy.score
   }
 , setStage: function() {
     this.line1 = this.game.add.bitmapText(10
