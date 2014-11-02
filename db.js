@@ -61,6 +61,12 @@ exports.seedProd = function() {
     , _ = require('lodash')
     , randMoves = []
 
+  var patmood = {
+    "name": "Patrick Moody",
+    "screen_name": "patmood",
+    "location": "San Francisco, CA",
+  }
+
   User.findOrCreate(patmood, function(err, user) {
     if (err) { console.log(err); }
     for (var i = 0; i < 10; i++) { randMoves.push(_.sample(allMoves)) }
