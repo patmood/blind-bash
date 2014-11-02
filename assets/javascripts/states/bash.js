@@ -17,14 +17,12 @@ Bash.prototype = {
 
   }
 , preload: function() {
-    var info = document.getElementById('secret-info')
+    var data = window.moveData
     this.enemyData = {
-      user: JSON.parse(info.getAttribute('data-enemy'))
-    , moves: JSON.parse(info.getAttribute('data-moves'))
+      user: data.enemy
+    , moves: data.moves
     }
-    this.userData = {
-      user: JSON.parse(info.getAttribute('data-user'))
-    }
+    this.userData = { user: data.user }
   }
 , create: function() {
     var halfWidth = this.game.width / 2

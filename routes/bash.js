@@ -4,11 +4,15 @@ var express = require('express')
   , Move = require('../models/move.js')
 
 router.get('/', function(req, res) {
+  res.render('bash');
+});
+
+router.get('/moves', function(req, res) {
   Move.findOneRandom(function(err, move) {
     if (err) throw err
     User.findById(move.user_id, function(err, user) {
       if (err) throw err
-      return res.render('bash', { enemy: user, moves: move, user: req.user });
+      return res.json({ enemy: user, moves: move, user: req.user });
     })
   })
 });

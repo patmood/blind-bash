@@ -20,15 +20,6 @@ Play.prototype = {
     this.load.audio('jump', 'sound/jump.wav')
     this.playerSeq = []
 
-    var info = document.getElementById('secret-info')
-    this.enemyData = {
-      user: JSON.parse(info.getAttribute('data-enemy'))
-    , moves: JSON.parse(info.getAttribute('data-moves'))
-    }
-
-    this.userData = {
-      user: JSON.parse(info.getAttribute('data-user'))
-    }
   }
 , onLoadComplete: function() {
     this.ready = true
@@ -52,21 +43,32 @@ Play.prototype = {
     this.question.anchor.setTo(0.5, 0.5)
 
     // Get Enemy
-    this.enemySeq = this.enemyData.moves.moves
-    var line1 = this.game.add.bitmapText(10
-                , 10
-                , 'regFont'
-                , 'Fighting @' + this.enemyData.user.screen_name
-                , 36)
-    line1.x = this.game.width * 0.5 - line1.textWidth * 0.5
+    var _this = this
+    $.getJSON('/bash/moves/', function(data) {
+      window.moveData = data
+      _this.enemyData = {
+        user: data.enemy
+      , moves: data.moves
+      }
 
-    var line2 = this.game.add.bitmapText(10
-                , 50
-                , 'regFont'
-                , 'From ' + this.enemyData.user.location
-                , 24)
-    line2.x = this.game.width * 0.5 - line2.textWidth * 0.5
-    console.log(this.enemyData)
+      _this.userData = { user: data.user }
+
+      console.log(data)
+      _this.enemySeq = _this.enemyData.moves.moves
+      var line1 = _this.game.add.bitmapText(10
+                  , 10
+                  , 'regFont'
+                  , 'Fighting @' + _this.enemyData.user.screen_name
+                  , 36)
+      line1.x = _this.game.width * 0.5 - line1.textWidth * 0.5
+
+      var line2 = _this.game.add.bitmapText(10
+                  , 50
+                  , 'regFont'
+                  , 'From ' + _this.enemyData.user.location
+                  , 24)
+      line2.x = _this.game.width * 0.5 - line2.textWidth * 0.5
+    })
 
     // Add buttons
     var punchButton = this.game.add.button(halfWidth, quarterHeight * 2, 'red', this.move, this)
