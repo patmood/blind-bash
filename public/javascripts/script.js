@@ -137,6 +137,20 @@ Bash.prototype = {
                 , 36)
     this.line1.x = this.game.width * 0.5 - this.line1.textWidth * 0.5
 
+    if (this.userData.user) {
+      this.p1text = this.game.add.bitmapText(this.game.width * 0.1
+                  , this.game.height * 0.5
+                  , 'regFont'
+                  , '@' + this.userData.user.screen_name
+                  , 36)
+    }
+
+    this.p2text = this.game.add.bitmapText(this.game.width * 0.6
+                , this.game.height * 0.5
+                , 'regFont'
+                , '@' + this.enemyData.user.screen_name
+                , 36)
+
     // Play bash
     this.game.input.onDown.addOnce(function(){
       this.line1.text = ''
